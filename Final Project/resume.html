@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Résumé — Molly McDowell</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0a2342;
+      --blue: #1565c0;
+      --light-blue: #e8f0fe;
+      --accent: #1e88e5;
+      --white: #ffffff;
+      --gray: #f4f6f9;
+      --text: #1a1a2e;
+    }
+    body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background: var(--gray); }
+ 
+    /* NAVBAR */
+    .navbar { background: var(--navy) !important; padding: 1rem 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.18); }
+    .navbar-brand { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--white) !important; }
+    .nav-link { color: rgba(255,255,255,0.85) !important; font-weight: 400; margin: 0 0.25rem; transition: color 0.2s; }
+    .nav-link:hover { color: var(--white) !important; }
+    .navbar-toggler { border-color: rgba(255,255,255,0.4); }
+    .navbar-toggler-icon { filter: invert(1); }
+ 
+    /* PAGE HEADER */
+    .page-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      color: var(--white);
+      padding: 60px 0 50px;
+    }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 0.25rem; }
+    .page-header p { color: rgba(255,255,255,0.75); font-size: 1.05rem; margin: 0; }
+ 
+    /* RESUME LAYOUT */
+    .resume-wrapper { padding: 50px 0 70px; }
+    .resume-card {
+      background: var(--white);
+      border-radius: 4px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+ 
+    /* SIDEBAR */
+    .resume-sidebar {
+      background: var(--navy);
+      color: var(--white);
+      padding: 2.5rem 2rem;
+      min-height: 100%;
+    }
+    .sidebar-avatar {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 3px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      color: rgba(255,255,255,0.5);
+      margin: 0 auto 1.5rem;
+    }
+    .sidebar-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; text-align: center; margin-bottom: 0.25rem; }
+    .sidebar-title { color: rgba(255,255,255,0.6); font-size: 0.88rem; text-align: center; margin-bottom: 2rem; }
+    .sidebar-section-title {
+      font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; margin-top: 1.75rem;
+      border-top: 1px solid rgba(255,255,255,0.12); padding-top: 1.25rem;
+    }
+    .sidebar-section-title:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    .contact-item { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; font-size: 0.9rem; color: rgba(255,255,255,0.8); }
+    .contact-item i { color: var(--accent); width: 16px; }
+    .skill-bar-label { display: flex; justify-content: space-between; font-size: 0.87rem; margin-bottom: 0.3rem; color: rgba(255,255,255,0.85); }
+    .skill-bar-track { background: rgba(255,255,255,0.12); border-radius: 2px; height: 5px; margin-bottom: 0.85rem; }
+    .skill-bar-fill { height: 5px; border-radius: 2px; background: var(--accent); }
+    .sidebar-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.85);
+      border-radius: 2px;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.8rem;
+      margin: 0.2rem 0.15rem 0.2rem 0;
+    }
+ 
+    /* MAIN CONTENT */
+    .resume-main { padding: 2.5rem 2.5rem; }
+    .resume-section { margin-bottom: 2.5rem; }
+    .resume-section:last-child { margin-bottom: 0; }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--navy);
+      border-bottom: 2px solid var(--light-blue);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .section-heading i { color: var(--blue); font-size: 1.1rem; }
+ 
+    /* ENTRY */
+    .entry { margin-bottom: 1.5rem; }
+    .entry-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; }
+    .entry-title { font-weight: 600; color: var(--navy); font-size: 1rem; margin-bottom: 0.1rem; }
+    .entry-org { color: var(--blue); font-size: 0.92rem; font-weight: 600; }
+    .entry-date { font-size: 0.82rem; color: #888; white-space: nowrap; background: var(--gray); padding: 0.2rem 0.6rem; border-radius: 2px; }
+    .entry-location { font-size: 0.82rem; color: #888; }
+    .entry ul { margin: 0.6rem 0 0 1rem; padding: 0; }
+    .entry ul li { color: #444; font-size: 0.93rem; line-height: 1.6; margin-bottom: 0.25rem; }
+ 
+    /* HONORS */
+    .honor-item { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.85rem; }
+    .honor-icon { color: var(--blue); font-size: 1.1rem; margin-top: 0.1rem; }
+    .honor-text { font-size: 0.93rem; color: #444; line-height: 1.5; }
+    .honor-text strong { color: var(--navy); }
+ 
+    footer {
+      background: var(--navy); color: rgba(255,255,255,0.7);
+      padding: 2.5rem 0; text-align: center;
+    }
+    footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 0.75rem; font-size: 1.3rem; }
+    footer a:hover { color: var(--white); }
+    footer p { margin: 0.75rem 0 0; font-size: 0.88rem; }
+    .footer-name { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.1rem; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+ 
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Molly McDowell</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="resume.html">Résumé</a></li>
+          <li class="nav-item"><a class="nav-link" href="running.html">Running</a></li>
+          <li class="nav-item"><a class="nav-link" href="game.html">Hurdle Game</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+ 
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container">
+      <h1>Résumé</h1>
+      <p>Motivated professional with experience in customer service, data entry, and team collaboration, bringing strong organizational
+skills and attention to detail. Skilled in managing technical documentation and supporting project workflows, with a proven ability
+to adapt to diverse environments. Eager to leverage transferable skills to excel in any position given.
+success.</p>
+    </div>
+  </div>
+ 
+  <!-- RESUME BODY -->
+  <div class="resume-wrapper">
+    <div class="container">
+      <div class="resume-card">
+        <div class="row g-0">
+ 
+          <!-- SIDEBAR -->
+          <div class="col-lg-4">
+            <div class="resume-sidebar h-100">
+              <div class="sidebar-avatar">
+  <img src="/images/personal.JPG" alt="Molly McDowell" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />
+</div>
+              <div class="sidebar-name">Molly McDowell</div>
+              <div class="sidebar-title">Pre-Buisness, Freshman</div>
+ 
+              <div class="sidebar-section-title">Contact</div>
+              <div class="contact-item"><i class="bi bi-envelope"></i> mrmcd3@byu.edu</div>
+              <div class="contact-item"><i class="bi bi-linkedin"></i> https://www.linkedin.com/in/molly-mcdowell-4085433a8/</div>
+              <div class="contact-item"><i class="bi bi-geo-alt"></i> Provo, UT</div>
+ 
+              <div class="sidebar-section-title">Core Skills</div>
+              <div class="skill-bar-label"><span>Customer Service</span><span>100%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="width:100%"></div></div>
+              <div class="skill-bar-label"><span>Hard Working</span><span>95%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="width:95%"></div></div>
+              <div class="skill-bar-label"><span>Team Collaboration</span><span>85%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%"></div></div>
+              <div class="skill-bar-label"><span>Excel</span><span>75%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="width:75%"></div></div>
+              <div class="skill-bar-label"><span>Data Entry</span><span>70%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill" style="width:70%"></div></div>
+ 
+              
+ 
+              <div class="sidebar-section-title">Languages</div>
+              <div class="contact-item"><i class="bi bi-check-circle"></i> English (Native)</div>
+              <div class="contact-item"><i class="bi bi-check-circle"></i> Spanish (Beginner)</div>
+ 
+              <div class="sidebar-section-title">Interests</div>
+              <div class="contact-item"><i class="bi bi-lightning-charge"></i>Running</div>
+              <div class="contact-item"><i class="bi bi-code-slash"></i> AI</div>
+              <div class="contact-item"><i class="bi bi-book"></i>Religion</div>
+            </div>
+          </div>
+ 
+          <!-- MAIN -->
+          <div class="col-lg-8">
+            <div class="resume-main">
+ 
+              <!-- EDUCATION -->
+              <div class="resume-section">
+                <h2 class="section-heading"><i class="bi bi-mortarboard-fill"></i> Education</h2>
+ 
+                <div class="entry">
+                  <div class="entry-header">
+                    <div>
+                      <div class="entry-title"></div>
+                      <div class="entry-org">Brigham Young University</div>
+                      <div class="entry-location">Provo, UT</div>
+                    </div>
+                    <div class="entry-date">June 2025 – Present</div>
+                  </div>
+                  <ul>
+                    <li>GPA: 3.14 </li>
+                    <li>Relevant coursework: Economics, Marketing, Accounting, Religious Studies, Information Systems, Communications</li>
+                  </ul>
+                </div>
+ 
+                <div class="entry">
+                  <div class="entry-header">
+                    <div>
+                      <div class="entry-title">High School Diploma</div>
+                      <div class="entry-org">Discovery Canyon Campus High School</div>
+                      <div class="entry-location">Colorado Springs, CO</div>
+                    </div>
+                    <div class="entry-date">Graduated May 2025</div>
+                  </div>
+                  <ul>
+                    <li>Engineering, Student Government, AFJROTC, NHS, Women in STEM Engineering (WISE)</li>
+                    <li>Varsity Track &amp; Cross Country, 3 years; Team Captain, senior year</li>
+                  </ul>
+                </div>
+              </div>
+ 
+              <!-- EXPERIENCE -->
+              <div class="resume-section">
+                <h2 class="section-heading"><i class="bi bi-briefcase-fill"></i> Work Experience</h2>
+ 
+                <div class="entry">
+                  <div class="entry-header">
+                    <div>
+                      <div class="entry-title">Cashier</div>
+                      <div class="entry-org">Scheels</div>
+                      <div class="entry-location">Colorado Springs, CO</div>
+                    </div>
+                    <div class="entry-date">Feb – June 2025</div>
+                  </div>
+                  <ul>
+                    <li>Processed cash, credit, and digital payments accurately and efficiently 
+<li>Delivered friendly, fast customer service in a high-volume environment</li>
+<li>Maintained a balanced cash drawer and followed cash-handling procedures</li>
+<li>Assisted customers with questions, returns, and basic product information</li>
+<li>Stocked shelves, organized displays, and maintained a clean checkout area</li>
+<li>Worked collaboratively with team members to ensure smooth store operations</li>
+<li>Resolved customer concerns professionally to enhance customer satisfaction</li>
+<li>Followed company policies, safety guidelines, and loss-prevention procedures</li>
+                  </ul>
+                </div>
+ 
+                <div class="entry">
+                  <div class="entry-header">
+                    <div>
+                      <div class="entry-title">Engineering Assistant</div>
+                      <div class="entry-org">MCD Professional Consulting</div>
+                      <div class="entry-location">Colorado Springs, CO</div>
+                    </div>
+                    <div class="entry-date">Jan 23 – May 2025</div>
+                  </div>
+                  <ul>
+                    <li>Conducted research and analysis of technical data related to engineering projects
+<li>Assisted with comprehensive reports on project progress for management review</li>
+<li>Photographed, surveyed and documented site conditions</li>
+                   
+                  </ul>
+                </div>
+ 
+                <div class="entry">
+                  <div class="entry-header">
+                    <div>
+                      <div class="entry-title">Faith at Work Internship</div>
+                      <div class="entry-org">The Religious Freedom & Buisness Foundation</div>
+                      <div class="entry-location">Washington D.C</div>
+                    </div>
+                    <div class="entry-date">Mar – May 2026</div>
+                  </div>
+                  <ul>
+                    <li> Cold contacting Fortune 500 Companines</li>
+                    <li> Cordinating information</li>
+                    <li>Supervising the conference</li>
+                
+                  </ul>
+                </div>
+              </div>
+ 
+             
+    
+              <!-- HONORS -->
+              <div class="resume-section">
+                <h2 class="section-heading"><i class="bi bi-trophy-fill"></i> Honors &amp; Awards</h2>
+                <div class="honor-item">
+                  <i class="bi bi-award-fill honor-icon"></i>
+                  <div class="honor-text"><strong>Honor Roll</strong> — All Semesters, 2021-2025</div>
+                </div>
+                <div class="honor-item">
+                  <i class="bi bi-award-fill honor-icon"></i>
+                  <div class="honor-text"><strong>Women in STEM (WISE) Co-President</strong> — 2023–2025</div>
+                </div>
+                
+                <div class="honor-item">
+                  <i class="bi bi-award-fill honor-icon"></i>
+                  <div class="honor-text"><strong>State Track & Cross Country Participant </strong> — High School Track, 2022-2025</div>
+                </div>
+                </div>
+              </div>
+ 
+            </div><!-- end resume-main -->
+          </div>
+        </div><!-- end row -->
+      </div><!-- end resume-card -->
+    </div>
+  </div>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p class="footer-name">Molly McDowell</p>
+      <div>
+        <a href="https://github.com/" target="_blank"><i class="bi bi-github"></i></a>
+        <a href="https://linkedin.com/" target="_blank"><i class="bi bi-linkedin"></i></a>
+        <a href="mailto:molly@example.com"><i class="bi bi-envelope"></i></a>
+      </div>
+      <p>&copy; 202 Molly McDowell &mdash; All rights reserved.</p>
+    </div>
+  </footer>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
