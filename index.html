@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Molly McDowell</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0a2342;
+      --blue: #1565c0;
+      --light-blue: #e8f0fe;
+      --accent: #1e88e5;
+      --white: #ffffff;
+      --gray: #f4f6f9;
+      --text: #1a1a2e;
+    }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--text);
+      background: var(--white);
+    }
+    /* NAVBAR */
+    .navbar {
+      background: var(--navy) !important;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--white) !important;
+      letter-spacing: 0.5px;
+    }
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      margin: 0 0.25rem;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--white) !important; }
+    .navbar-toggler { border-color: rgba(255,255,255,0.4); }
+    .navbar-toggler-icon { filter: invert(1); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      color: var(--white);
+      padding: 110px 0 90px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 400px; height: 400px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+    .hero-eyebrow {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.82);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+    .hero-avatar {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 5px solid rgba(255,255,255,0.25);
+      object-fit: cover;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      color: rgba(255,255,255,0.5);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .hero-btns { margin-top: 2rem; gap: 1rem; display: flex; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--white);
+      color: var(--navy);
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border-radius: 2px;
+      border: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-hero-primary:hover {
+      background: var(--light-blue);
+      color: var(--navy);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .btn-hero-outline {
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border-radius: 2px;
+      border: 2px solid rgba(255,255,255,0.5);
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-hero-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+    }
+
+    /* CARDS */
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .nav-cards-section { padding: 80px 0; background: var(--gray); }
+    .nav-card {
+      background: var(--white);
+      border-radius: 4px;
+      border: none;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      transition: all 0.25s;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 100%;
+    }
+    .nav-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(21,101,192,0.15);
+      color: inherit;
+    }
+    .nav-card-icon {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      padding: 2.5rem;
+      text-align: center;
+      color: var(--white);
+      font-size: 3rem;
+    }
+    .nav-card-body { padding: 1.75rem; }
+    .nav-card-body h5 {
+      font-family: 'Playfair Display', serif;
+      color: var(--navy);
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .nav-card-body p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .nav-card-link {
+      color: var(--blue);
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* ABOUT STRIP */
+    .about-strip {
+      padding: 80px 0;
+      background: var(--white);
+    }
+    .about-strip .highlight-box {
+      background: var(--light-blue);
+      border-left: 4px solid var(--blue);
+      padding: 1.5rem 1.75rem;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 1.5rem;
+    }
+    .about-strip .highlight-box p { margin: 0; color: var(--navy); font-weight: 400; line-height: 1.7; }
+    .stat-item { text-align: center; padding: 1.5rem; }
+    .stat-item .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--blue);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-item .stat-label { font-size: 0.85rem; color: #666; margin-top: 0.25rem; }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
+      padding: 2.5rem 0;
+      text-align: center;
+    }
+    footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 0.75rem; font-size: 1.3rem; }
+    footer a:hover { color: var(--white); }
+    footer p { margin: 0.75rem 0 0; font-size: 0.88rem; }
+    .footer-name { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.1rem; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Molly McDowell</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="resume.html">Résumé</a></li>
+          <li class="nav-item"><a class="nav-link" href="running.html">Running</a></li>
+          <li class="nav-item"><a class="nav-link" href="game.html">Hurdle Game</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <p class="hero-eyebrow">Welcome</p>
+          <h1>Molly<br>McDowell</h1>
+          <p>Pre-Buisness student, long-distance runner, and a faithful diciple. </p>
+          <div class="hero-btns">
+            <a href="resume.html" class="btn-hero-primary">View Résumé</a>
+            <a href="running.html" class="btn-hero-outline">My Interests</a>
+          </div>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+          <div class="hero-avatar mx-auto">
+            <img src="/images/personal.JPG" alt="Molly McDowell" class="hero-avatar mx-auto" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION CARDS -->
+  <section class="nav-cards-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="section-label">Explore</p>
+        <h2 class="section-title">What's on This Site</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="resume.html" class="nav-card">
+            <div class="nav-card-icon"><i class="bi bi-file-earmark-person"></i></div>
+            <div class="nav-card-body">
+              <h5>Résumé</h5>
+              <p>Education, work experience, and skills</p>
+              <span class="nav-card-link">View Résumé →</span>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a href="running.html" class="nav-card">
+            <div class="nav-card-icon"><i class="bi bi-lightning-charge"></i></div>
+            <div class="nav-card-body">
+              <h5>Running</h5>
+              <p>My passion for trails and tracks is a daily comitiment.</p>
+              <span class="nav-card-link">Explore →</span>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a href="game.html" class="nav-card">
+            <div class="nav-card-icon"><i class="bi bi-controller"></i></div>
+            <div class="nav-card-body">
+              <h5>Hurdle Game</h5>
+              <p>A custom side-scrolling hurdles game built with HTML5 Canvas. Jump as far as you can!</p>
+              <span class="nav-card-link">Play Now →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT STRIP -->
+  <section class="about-strip">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <p class="section-label">About Me</p>
+          <h2 class="section-title">Living Life to the Fullest </h2>
+          <div class="highlight-box">
+            <p>I'm a freshman at Brigham Young University. Studying Pre-Buisness and dedicated to integrating religion into the workplace. I run on the side to keep me down to earth.</p>
+          </div>
+          <p style="color:#555; line-height:1.7;">Outside of class I keep myself busy with athletics, studying, and friends. This site is a snapshot of who I am, academically, professionally, and personally.</p>
+        </div>
+        <div class="col-lg-6">
+          <div class="row g-0">
+            <div class="col-4">
+              <div class="stat-item">
+                <div class="stat-num">3.14</div>
+                <div class="stat-label">GPA</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-item">
+                <div class="stat-num">1</div>
+                <div class="stat-label">Internships</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-item">
+                <div class="stat-num">Unlimited</div>
+                <div class="stat-label">Races Run</div>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2 mt-3">
+            <div class="col-6">
+              <div style="background:var(--light-blue); padding:1rem 1.25rem; border-radius:4px;">
+                <i class="bi bi-code-slash" style="color:var(--blue); font-size:1.2rem;"></i>
+                <div style="font-weight:600; color:var(--navy); margin-top:0.25rem;">Full time Student</div>
+                <div style="font-size:0.85rem; color:#555;"></div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div style="background:var(--light-blue); padding:1rem 1.25rem; border-radius:4px;">
+                <i class="bi bi-trophy" style="color:var(--blue); font-size:1.2rem;"></i>
+                <div style="font-weight:600; color:var(--navy); margin-top:0.25rem;">Causal Runner</div>
+                <div style="font-size:0.85rem; color:#555;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p class="footer-name">Molly McDowell</p>
+      <p>&copy; 2026 Molly McDowell &mdash; All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

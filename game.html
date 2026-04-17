@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hurdle Runner — Molly McDowell</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --navy: #0a2342;
+      --blue: #1565c0;
+      --light-blue: #e8f0fe;
+      --accent: #1e88e5;
+      --white: #ffffff;
+      --gray: #f4f6f9;
+    }
+ 
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--gray);
+      color: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+ 
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background: var(--navy);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+    }
+    .navbar-brand {
+      color: var(--white);
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+    .navbar-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.92rem;
+      transition: color 0.2s;
+    }
+    .navbar-links a:hover { color: var(--white); }
+ 
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--white);
+      padding: 40px 2rem 35px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 2.2rem; margin-bottom: 0.3rem; }
+    .page-header p { color: rgba(255,255,255,0.75); font-size: 1rem; }
+ 
+    /* ===== GAME WRAPPER ===== */
+    .game-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 1.5rem 60px;
+    }
+ 
+    .game-container {
+      background: var(--white);
+      border-radius: 6px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      padding: 2rem 2rem 1.75rem;
+      width: 100%;
+      max-width: 860px;
+    }
+ 
+    /* ===== HUD ===== */
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .hud-stat {
+      background: var(--light-blue);
+      border-radius: 4px;
+      padding: 0.45rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .hud-stat span { color: var(--blue); font-size: 1.05rem; }
+ 
+    /* ===== CANVAS ===== */
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 2px solid var(--light-blue);
+      cursor: pointer;
+      background: #ddeeff;
+    }
+ 
+    /* ===== CONTROLS ===== */
+    .controls {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-jump {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--white);
+      border: none;
+      padding: 0.75rem 2.25rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-jump:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-restart {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+      padding: 0.75rem 1.75rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-restart:hover { background: var(--light-blue); }
+ 
+    .key-hint {
+      font-size: 0.82rem;
+      color: #888;
+      text-align: center;
+      margin-top: 0.6rem;
+    }
+ 
+    /* ===== INSTRUCTIONS ===== */
+    .instructions {
+      margin-top: 2rem;
+      background: var(--light-blue);
+      border-left: 4px solid var(--blue);
+      border-radius: 0 4px 4px 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.92rem;
+      color: #333;
+      line-height: 1.7;
+    }
+    .instructions strong { color: var(--navy); }
+ 
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.88rem;
+    }
+    footer a { color: rgba(255,255,255,0.65); text-decoration: none; margin: 0 0.5rem; }
+    footer a:hover { color: var(--white); }
+  </style>
+</head>
+<body>
+ 
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">Molly McDowell</a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="resume.html">Résumé</a>
+      <a href="running.html">Running</a>
+      <a href="game.html">Hurdle Game</a>
+    </div>
+  </nav>
+ 
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>🏃‍♀️ Hurdle Runner</h1>
+    <p>Jump over the hurdles — how far can you go?</p>
+  </div>
+ 
+  <!-- GAME SECTION -->
+  <section class="game-section">
+    <div class="game-container">
+ 
+      <!-- HUD -->
+      <div class="hud">
+        <div class="hud-stat">Score: <span id="scoreDisplay">0</span></div>
+        <div class="hud-stat">High Score: <span id="highScoreDisplay">0</span></div>
+        <div class="hud-stat">Speed: <span id="speedDisplay">1x</span></div>
+        <div class="hud-stat">Hurdles Cleared: <span id="hurdleDisplay">0</span></div>
+      </div>
+ 
+      <!-- CANVAS -->
+      <canvas id="gameCanvas" width="820" height="260"></canvas>
+ 
+      <!-- CONTROLS -->
+      <div class="controls">
+        <button class="btn-jump" onclick="handleJump()">Jump</button>
+        <button class="btn-restart" onclick="restartGame()">Restart</button>
+      </div>
+      <p class="key-hint">Press <kbd>Space</kbd>, <kbd>↑</kbd>, or tap canvas to jump</p>
+ 
+      <!-- INSTRUCTIONS -->
+      <div class="instructions">
+        <strong>How to Play:</strong> Your runner moves automatically. Press <strong>Space</strong>,
+        the <strong>Up Arrow</strong>, click the <strong>Jump button</strong>, or <strong>tap the canvas</strong>
+        to jump over hurdles. The game gets faster every 5 hurdles you clear. Don't hit a hurdle — the run ends!
+        You can double-jump once while in the air.
+      </div>
+    </div>
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <a href="https://github.com/" target="_blank">GitHub</a> |
+      <a href="https://linkedin.com/" target="_blank">LinkedIn</a> |
+      <a href="mailto:molly@example.com">Email</a>
+    </div>
+    <p style="margin-top:0.5rem;">&copy; 2026 Molly McDowell &mdash; Hurdle Runner Game</p>
+  </footer>
+ 
+<script>
+/* ===================================================
+   HURDLE RUNNER — Canvas Game
+   =================================================== */
+ 
+const canvas = document.getElementById('gameCanvas');
+const ctx    = canvas.getContext('2d');
+ 
+// ---- CONSTANTS ----
+const W = canvas.width;
+const H = canvas.height;
+const GROUND_Y    = H - 50;
+const RUNNER_X    = 100;
+const RUNNER_W    = 32;
+const RUNNER_H    = 54;
+const HURDLE_W    = 18;
+const HURDLE_H    = 44;
+const GRAVITY     = 0.62;
+const JUMP_FORCE  = -14.5;
+const BASE_SPEED  = 6;
+ 
+// ---- STATE ----
+let state = 'idle'; // idle | running | dead
+let score = 0;
+let highScore = 0;
+let hurdlesCleared = 0;
+let frameCount = 0;
+let gameSpeed = BASE_SPEED;
+let animFrame = null;
+ 
+// Runner physics
+let runnerY      = GROUND_Y - RUNNER_H;
+let velY         = 0;
+let isOnGround   = true;
+let canDoubleJump = false;
+let hasDoubleJumped = false;
+ 
+// Hurdles
+let hurdles = [];
+let nextHurdleIn = 90; // frames until next hurdle
+ 
+// Animation frame for runner legs
+let legFrame = 0;
+let legTimer  = 0;
+ 
+// Particles
+let particles = [];
+ 
+// ---- COLORS ----
+const SKY_TOP    = '#c9e8ff';
+const SKY_BOT    = '#e8f4ff';
+const GROUND_CLR = '#1565c0';
+const GROUND_TOP = '#1e88e5';
+const TRACK_CLR  = '#d4a55a';
+const RUNNER_CLR = '#0a2342';
+const SHIRT_CLR  = '#1565c0';
+const HAIR_CLR   = '#5c3317';
+const HURDLE_CLR = '#cc2200';
+const HURDLE_BAR = '#ff4422';
+ 
+// ---- CLOUD state ----
+let clouds = [
+  { x: 200, y: 40, w: 90 },
+  { x: 500, y: 25, w: 120 },
+  { x: 720, y: 55, w: 70 },
+];
+ 
+// ---- TRACK LINES ----
+let trackLines = [0, 130, 260, 390, 520, 650, 780].map(x => x);
+ 
+// ---- INIT ----
+draw(); // show idle screen
+ 
+// ---- INPUT ----
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') {
+    e.preventDefault();
+    handleJump();
+  }
+});
+canvas.addEventListener('click', handleJump);
+canvas.addEventListener('touchstart', e => { e.preventDefault(); handleJump(); }, { passive: false });
+ 
+function handleJump() {
+  if (state === 'idle' || state === 'dead') {
+    restartGame();
+    return;
+  }
+  if (isOnGround) {
+    velY = JUMP_FORCE;
+    isOnGround = false;
+    hasDoubleJumped = false;
+    spawnJumpParticles();
+  } else if (!hasDoubleJumped) {
+    velY = JUMP_FORCE * 0.88;
+    hasDoubleJumped = true;
+    spawnJumpParticles();
+  }
+}
+ 
+// ---- RESTART ----
+function restartGame() {
+  state     = 'running';
+  score     = 0;
+  hurdlesCleared = 0;
+  frameCount = 0;
+  gameSpeed = BASE_SPEED;
+  hurdles   = [];
+  particles = [];
+  nextHurdleIn = 90;
+  runnerY  = GROUND_Y - RUNNER_H;
+  velY     = 0;
+  isOnGround  = true;
+  hasDoubleJumped = false;
+  legFrame = 0;
+  legTimer  = 0;
+  clouds = [
+    { x: 200, y: 40, w: 90 },
+    { x: 500, y: 25, w: 120 },
+    { x: 720, y: 55, w: 70 },
+  ];
+  trackLines = [0, 130, 260, 390, 520, 650, 780];
+  updateHUD();
+  if (animFrame) cancelAnimationFrame(animFrame);
+  loop();
+}
+ 
+// ---- GAME LOOP ----
+function loop() {
+  if (state !== 'running') return;
+  update();
+  draw();
+  animFrame = requestAnimationFrame(loop);
+}
+ 
+// ---- UPDATE ----
+function update() {
+  frameCount++;
+  score++;
+  updateHUD();
+ 
+  // Speed ramp every 5 hurdles
+  gameSpeed = BASE_SPEED + Math.floor(hurdlesCleared / 5) * 0.8;
+ 
+  // Runner physics
+  velY     += GRAVITY;
+  runnerY  += velY;
+  if (runnerY >= GROUND_Y - RUNNER_H) {
+    runnerY     = GROUND_Y - RUNNER_H;
+    velY        = 0;
+    isOnGround  = true;
+    hasDoubleJumped = false;
+  }
+ 
+  // Leg animation (only on ground)
+  if (isOnGround) {
+    legTimer++;
+    if (legTimer > 8) { legFrame = (legFrame + 1) % 4; legTimer = 0; }
+  } else {
+    legFrame = 0;
+  }
+ 
+  // Hurdle spawning
+  nextHurdleIn--;
+  if (nextHurdleIn <= 0) {
+    hurdles.push({ x: W + 10, cleared: false });
+    nextHurdleIn = Math.floor(Math.random() * 50) + 85 - Math.min(hurdlesCleared * 2, 35);
+  }
+ 
+  // Move hurdles
+  for (let i = hurdles.length - 1; i >= 0; i--) {
+    hurdles[i].x -= gameSpeed;
+ 
+    // Score a cleared hurdle
+    if (!hurdles[i].cleared && hurdles[i].x + HURDLE_W < RUNNER_X) {
+      hurdles[i].cleared = true;
+      hurdlesCleared++;
+      spawnClearParticles(hurdles[i].x + HURDLE_W, GROUND_Y - HURDLE_H);
+    }
+ 
+    // Remove off-screen
+    if (hurdles[i].x + HURDLE_W < -20) { hurdles.splice(i, 1); continue; }
+ 
+    // Collision (AABB with slight forgiveness)
+    const pad = 5;
+    const rx1 = RUNNER_X + pad;
+    const rx2 = RUNNER_X + RUNNER_W - pad;
+    const ry1 = runnerY  + pad;
+    const ry2 = runnerY  + RUNNER_H - pad;
+    const hx1 = hurdles[i].x + pad;
+    const hx2 = hurdles[i].x + HURDLE_W - pad;
+    const hy1 = GROUND_Y - HURDLE_H;
+    const hy2 = GROUND_Y;
+    if (rx2 > hx1 && rx1 < hx2 && ry2 > hy1 && ry1 < hy2) {
+      die();
+      return;
+    }
+  }
+ 
+  // Move clouds
+  clouds.forEach(c => {
+    c.x -= gameSpeed * 0.2;
+    if (c.x + c.w < 0) { c.x = W + 20; c.y = Math.random() * 60 + 15; c.w = Math.random() * 80 + 60; }
+  });
+ 
+  // Move track lines
+  trackLines = trackLines.map(x => {
+    x -= gameSpeed;
+    if (x < -2) x += W;
+    return x;
+  });
+ 
+  // Particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.life--;
+  });
+  particles = particles.filter(p => p.life > 0);
+}
+ 
+// ---- DRAW ----
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+ 
+  // Sky gradient
+  const skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+  skyGrad.addColorStop(0, SKY_TOP);
+  skyGrad.addColorStop(1, SKY_BOT);
+  ctx.fillStyle = skyGrad;
+  ctx.fillRect(0, 0, W, GROUND_Y);
+ 
+  // Clouds
+  clouds.forEach(c => drawCloud(c.x, c.y, c.w));
+ 
+  // Ground
+  ctx.fillStyle = TRACK_CLR;
+  ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+ 
+  // Track lane lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([30, 20]);
+  trackLines.forEach(x => {
+    ctx.beginPath();
+    ctx.moveTo(x, GROUND_Y);
+    ctx.lineTo(x + 30, GROUND_Y);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+ 
+  // Ground top strip
+  ctx.fillStyle = GROUND_TOP;
+  ctx.fillRect(0, GROUND_Y, W, 4);
+ 
+  // Hurdles
+  hurdles.forEach(h => drawHurdle(h.x));
+ 
+  // Runner
+  drawRunner(RUNNER_X, runnerY);
+ 
+  // Particles
+  particles.forEach(p => {
+    ctx.globalAlpha = p.life / p.maxLife;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+ 
+  // Overlay screens
+  if (state === 'idle') drawIdle();
+  if (state === 'dead') drawDead();
+}
+ 
+// ---- DRAW CLOUD ----
+function drawCloud(x, y, w) {
+  ctx.fillStyle = 'rgba(255,255,255,0.82)';
+  const h = w * 0.38;
+  ctx.beginPath();
+  ctx.ellipse(x + w * 0.5, y + h * 0.6, w * 0.5, h * 0.5, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + w * 0.3, y + h * 0.55, w * 0.28, h * 0.45, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + w * 0.7, y + h * 0.55, w * 0.25, h * 0.42, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+ 
+// ---- DRAW HURDLE ----
+function drawHurdle(x) {
+  const top = GROUND_Y - HURDLE_H;
+  const postW = 5;
+ 
+  // Posts
+  ctx.fillStyle = HURDLE_CLR;
+  ctx.fillRect(x, top, postW, HURDLE_H);
+  ctx.fillRect(x + HURDLE_W - postW, top, postW, HURDLE_H);
+ 
+  // Crossbar
+  const barH = 6;
+  const barY = top + 4;
+  ctx.fillStyle = HURDLE_BAR;
+  ctx.fillRect(x - 2, barY, HURDLE_W + 4, barH);
+ 
+  // Crossbar stripe
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(x - 2, barY + 1, HURDLE_W + 4, 2);
+ 
+  // Base feet
+  ctx.fillStyle = HURDLE_CLR;
+  ctx.fillRect(x - 4, GROUND_Y - 6, HURDLE_W + 8, 6);
+}
+ 
+// ---- DRAW RUNNER ----
+function drawRunner(x, y) {
+  const airborne = !isOnGround;
+ 
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.12)';
+  ctx.beginPath();
+  ctx.ellipse(x + RUNNER_W / 2, GROUND_Y + 3, RUNNER_W * 0.6, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+ 
+  // Legs (animated)
+  ctx.strokeStyle = RUNNER_CLR;
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+ 
+  if (airborne) {
+    // Tuck legs for jump
+    // Left leg
+    ctx.beginPath();
+    ctx.moveTo(x + 10, y + RUNNER_H * 0.6);
+    ctx.lineTo(x + 5,  y + RUNNER_H * 0.85);
+    ctx.lineTo(x + 8,  y + RUNNER_H);
+    ctx.stroke();
+    // Right leg — hurdler's trailing leg out
+    ctx.beginPath();
+    ctx.moveTo(x + 22, y + RUNNER_H * 0.6);
+    ctx.lineTo(x + 32, y + RUNNER_H * 0.75);
+    ctx.lineTo(x + 34, y + RUNNER_H * 0.65);
+    ctx.stroke();
+  } else {
+    // Alternating legs
+    const frames = [
+      [[10, 0.55, 2, 0.85, 5, 1.0],  [22, 0.55, 28, 0.78, 24, 1.0]],
+      [[10, 0.55, 6, 0.75, 2,  1.0],  [22, 0.55, 30, 0.82, 32, 1.0]],
+      [[10, 0.55, 4, 0.80, 8,  1.0],  [22, 0.55, 26, 0.75, 20, 1.0]],
+      [[10, 0.55, 8, 0.72, 14, 1.0],  [22, 0.55, 24, 0.82, 28, 1.0]],
+    ];
+    const f = frames[legFrame];
+    // left
+    ctx.beginPath();
+    ctx.moveTo(x + f[0][0], y + RUNNER_H * f[0][1]);
+    ctx.lineTo(x + f[0][2], y + RUNNER_H * f[0][3]);
+    ctx.lineTo(x + f[0][4], y + RUNNER_H * f[0][5]);
+    ctx.stroke();
+    // right
+    ctx.beginPath();
+    ctx.moveTo(x + f[1][0], y + RUNNER_H * f[1][1]);
+    ctx.lineTo(x + f[1][2], y + RUNNER_H * f[1][3]);
+    ctx.lineTo(x + f[1][4], y + RUNNER_H * f[1][5]);
+    ctx.stroke();
+  }
+ 
+  // Torso
+  ctx.fillStyle = SHIRT_CLR;
+  ctx.beginPath();
+  ctx.roundRect(x + 6, y + RUNNER_H * 0.28, 20, RUNNER_H * 0.35, 4);
+  ctx.fill();
+ 
+  // Arms
+  ctx.strokeStyle = RUNNER_CLR;
+  ctx.lineWidth = 4;
+  if (airborne) {
+    // Both arms forward
+    ctx.beginPath();
+    ctx.moveTo(x + 16, y + RUNNER_H * 0.32);
+    ctx.lineTo(x + 2,  y + RUNNER_H * 0.48);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + 16, y + RUNNER_H * 0.32);
+    ctx.lineTo(x + 32, y + RUNNER_H * 0.42);
+    ctx.stroke();
+  } else {
+    const aFrames = [
+      [2, 0.42, 30, 0.52],
+      [4, 0.48, 28, 0.46],
+      [2, 0.52, 30, 0.42],
+      [4, 0.46, 28, 0.48],
+    ];
+    const a = aFrames[legFrame];
+    ctx.beginPath();
+    ctx.moveTo(x + 12, y + RUNNER_H * 0.32);
+    ctx.lineTo(x + a[0], y + RUNNER_H * a[1]);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + 20, y + RUNNER_H * 0.32);
+    ctx.lineTo(x + a[2], y + RUNNER_H * a[3]);
+    ctx.stroke();
+  }
+ 
+  // Head
+  ctx.fillStyle = '#f5c8a0';
+  ctx.beginPath();
+  ctx.arc(x + RUNNER_W / 2, y + 12, 12, 0, Math.PI * 2);
+  ctx.fill();
+ 
+  // Hair
+  ctx.fillStyle = HAIR_CLR;
+  ctx.beginPath();
+  ctx.arc(x + RUNNER_W / 2, y + 10, 12, Math.PI * 1.0, 0, false);
+  ctx.fill();
+ 
+  // Ponytail
+  ctx.strokeStyle = HAIR_CLR;
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x + RUNNER_W / 2 - 2, y + 6);
+  ctx.quadraticCurveTo(x - 6, y + 10, x - 8, y + 18);
+  ctx.stroke();
+ 
+  // Race number
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 8px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('7', x + 16, y + RUNNER_H * 0.5);
+  ctx.textAlign = 'left';
+}
+ 
+// ---- IDLE SCREEN ----
+function drawIdle() {
+  // Overlay
+  ctx.fillStyle = 'rgba(10,35,66,0.72)';
+  ctx.fillRect(0, 0, W, H);
+ 
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 32px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('HURDLE RUNNER', W / 2, H / 2 - 30);
+ 
+  ctx.font = '16px Arial';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.fillText('Press Space, ↑, or tap/click Jump to start', W / 2, H / 2 + 10);
+ 
+  ctx.font = '13px Arial';
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillText('Double-jump available in the air!', W / 2, H / 2 + 35);
+  ctx.textAlign = 'left';
+}
+ 
+// ---- DEAD SCREEN ----
+function drawDead() {
+  ctx.fillStyle = 'rgba(10,35,66,0.78)';
+  ctx.fillRect(0, 0, W, H);
+ 
+  ctx.fillStyle = '#ff4422';
+  ctx.font = 'bold 34px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('KNOCKED DOWN!', W / 2, H / 2 - 40);
+ 
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '18px Arial';
+  ctx.fillText(`Score: ${score}   •   Hurdles Cleared: ${hurdlesCleared}`, W / 2, H / 2);
+ 
+  if (score >= highScore && hurdlesCleared > 0) {
+    ctx.fillStyle = '#ffd700';
+    ctx.font = 'bold 15px Arial';
+    ctx.fillText('🏆 New High Score!', W / 2, H / 2 + 28);
+  }
+ 
+  ctx.fillStyle = 'rgba(255,255,255,0.75)';
+  ctx.font = '15px Arial';
+  ctx.fillText('Press Space, ↑, Jump button, or click to try again', W / 2, H / 2 + 55);
+  ctx.textAlign = 'left';
+}
+ 
+// ---- DIE ----
+function die() {
+  state = 'dead';
+  if (score > highScore) highScore = score;
+  updateHUD();
+  spawnDeathParticles();
+  draw();
+  cancelAnimationFrame(animFrame);
+}
+ 
+// ---- PARTICLES ----
+function spawnJumpParticles() {
+  for (let i = 0; i < 8; i++) {
+    particles.push({
+      x: RUNNER_X + 16, y: GROUND_Y,
+      vx: (Math.random() - 0.5) * 3,
+      vy: -(Math.random() * 3 + 1),
+      r: Math.random() * 3 + 2,
+      color: '#1e88e5',
+      life: 25, maxLife: 25
+    });
+  }
+}
+ 
+function spawnClearParticles(x, y) {
+  for (let i = 0; i < 12; i++) {
+    const colors = ['#ffd700','#1e88e5','#ffffff','#ff4422'];
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 5,
+      vy: -(Math.random() * 4 + 1),
+      r: Math.random() * 4 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 35, maxLife: 35
+    });
+  }
+}
+ 
+function spawnDeathParticles() {
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      x: RUNNER_X + 16, y: runnerY + RUNNER_H / 2,
+      vx: (Math.random() - 0.5) * 8,
+      vy: -(Math.random() * 6 + 2),
+      r: Math.random() * 5 + 2,
+      color: ['#ff4422','#ffd700','#1565c0'][Math.floor(Math.random()*3)],
+      life: 45, maxLife: 45
+    });
+  }
+}
+ 
+// ---- HUD UPDATE ----
+function updateHUD() {
+  document.getElementById('scoreDisplay').textContent    = score;
+  document.getElementById('highScoreDisplay').textContent = highScore;
+  document.getElementById('hurdleDisplay').textContent   = hurdlesCleared;
+  document.getElementById('speedDisplay').textContent    = (gameSpeed / BASE_SPEED).toFixed(1) + 'x';
+}
+</script>
+</body>
+</html>
